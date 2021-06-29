@@ -5,27 +5,27 @@ using UnityEngine;
 public class PlayerMovementScript : MonoBehaviour
 {
 
-    public float speed = 12f;
-    public float gravity = -9.8f;
-    public float jumpHeight = 2.5f;
-    public float dashCD = 3;
+    public float speed = 12f; //used to control exactly how fast the player goes
+    public float gravity = -9.8f; //how fast the player falls
+    public float jumpHeight = 2.5f; //how high the player jumps
+    public float dashCD = 3; //time inbetween each dash
 
     public CharacterController controller;
     public Transform groundCheck;
-    public float groundDistance = 0.59f;
+    public float groundDistance = 0.59f; 
     public LayerMask groundMask;
     public LayerMask jumpMask;
     public Transform body;
     public AudioSource dashSound;
 
-    float jumpPadDist = 0.5f;
+    float jumpPadDist = 0.5f; 
     float lastDash;
     Vector3 velocity;
     bool isGrounded;
     bool onJumpPad;
     float dashTime = 0.5f;
-    public float dashSpeed = 10;
-    public float jumpPadHeight = 3;
+    public float dashSpeed = 10; //how fast the player dashes
+    public float jumpPadHeight = 3; //the multiplier for how much a jump pad will increase a players jump height
     bool doubleJump = true;
     bool didJump = false;
     bool didDash = false;
@@ -47,17 +47,19 @@ public class PlayerMovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(this.transform.position.y < -5) {
+        /*if(this.transform.position.y < -5) {
             Vector3 newPos = this.transform.position;
 			newPos.y = 1;
 			this.transform.position = newPos;
-        }
+        }*/
 
+        //SPRINT
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
             if(speed < 35) {
-                speed = 15;   
+                speed = 15;   //increases speed from 8 to 15 upon pressing lshift, and while not crouching
             }
             justSprinted = true;
+            //changing FOV on sprinting
             if (Camera.main.fieldOfView < 95f) {
                 Camera.main.fieldOfView += 0.3f;
             }
@@ -106,6 +108,7 @@ public class PlayerMovementScript : MonoBehaviour
             didDash=false;
         }
 
+        //CROUCH
         if(Input.GetKeyDown(KeyCode.LeftControl)) {
             if (isCrouched) {
                 body.transform.localScale += new Vector3(0f, 0.5f, 0f);
@@ -116,9 +119,10 @@ public class PlayerMovementScript : MonoBehaviour
             isCrouched = !isCrouched;
         }
 
+        //THE METHOD THAT MOVES THE PLAYER
         controller.Move(move * speed * Time.deltaTime);
 
-
+        //JUMP - must be grounded or have not double jumped
         if(Input.GetButtonDown("Jump") && (isGrounded || doubleJump) && !didJump) {
             velocity.y = Mathf.Sqrt(jumpHeight*-2*gravity);
             

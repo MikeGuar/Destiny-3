@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Level1Script : MonoBehaviour
 {
+
+    public LayerMask player;
+    public Transform playerCheck;
+
+    bool isPlayerIn = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,23 +20,11 @@ public class Level1Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    void onCollisionEnter(Collision other) {
-        Debug.Log("test");
-        print("test");
-        if(other.gameObject.tag == "Player") {
+        isPlayerIn = Physics.CheckSphere(playerCheck.position, 2.5f, player);
+        if(isPlayerIn) {
             SceneManager.LoadScene("Level 1");
         }
-    }
 
-    void onTriggerEnter(Collider other) {
-        Debug.Log("test");
-        print("test");
-        if(other.gameObject.tag == "Player") {
-            SceneManager.LoadScene("Level 1");
-        }
     }
     
 }

@@ -28,11 +28,8 @@ public class DashIcon : MonoBehaviour
 
         if(timer > 0.025) {
             timer = lastDash - Time.time;
-
-
             GetComponent<RectTransform>().sizeDelta = new Vector2((timer/-3*200)+200, 200);
         }
-
         else {
             GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
             timer = 0;
