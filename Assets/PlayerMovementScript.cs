@@ -16,6 +16,7 @@ public class PlayerMovementScript : MonoBehaviour
     public LayerMask groundMask;
     public LayerMask jumpMask;
     public Transform body;
+    public AudioSource dashSound;
 
     float jumpPadDist = 0.5f;
     float lastDash;
@@ -30,9 +31,17 @@ public class PlayerMovementScript : MonoBehaviour
     bool didDash = false;
     bool justSprinted = false;
     float defaultSpeed;
+    bool isCrouched = false;
+
+    RaycastHit hit;
 
     void Start() {
         defaultSpeed = speed;
+        dashSound = GetComponent<AudioSource>();
+    }
+
+    void FixedUpdate() {
+        
     }
 
     // Update is called once per frame
@@ -44,15 +53,22 @@ public class PlayerMovementScript : MonoBehaviour
 			this.transform.position = newPos;
         }
 
-        if(Input.GetKey(KeyCode.LeftShift)) {
-            if(speed < 20) {
-                speed = 10;   
+        if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
+            if(speed < 35) {
+                speed = 15;   
             }
             justSprinted = true;
+            if (Camera.main.fieldOfView < 95f) {
+                Camera.main.fieldOfView += 0.3f;
+            }
         }
         else if(justSprinted) {
             speed = defaultSpeed;
             justSprinted = false;
+        } else {
+            if (Camera.main.fieldOfView > 80f) {
+                Camera.main.fieldOfView -= 0.3f;
+            }
         }
         
 
@@ -81,12 +97,23 @@ public class PlayerMovementScript : MonoBehaviour
             dashTime = 0.5f + Time.time; //how long bonus speed lasts (0.5s)
             speed = speed + dashSpeed; //setting actual speed
             didDash = true;
+            dashSound.Play(0);
         }
 
         //AFTER 0.5s SPEED RETURNS TO NORMAL
         if (Time.time > dashTime && didDash) {
             speed = speed - dashSpeed; //resetting speed
             didDash=false;
+        }
+
+        if(Input.GetKeyDown(KeyCode.LeftControl)) {
+            if (isCrouched) {
+                body.transform.localScale += new Vector3(0f, 0.5f, 0f);
+            } else {
+                body.transform.localScale += new Vector3(0f, -0.5f, 0f);
+            }
+
+            isCrouched = !isCrouched;
         }
 
         controller.Move(move * speed * Time.deltaTime);
@@ -102,5 +129,18 @@ public class PlayerMovementScript : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
         didJump=false;
+
+        if(Input.GetMouseButtonDown(0)) {
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, groundMask))
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+                Debug.Log("Did Hit");
+            }
+            else
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+                Debug.Log("Did not Hit");
+            }
+        }
     }
 }
