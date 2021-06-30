@@ -28,24 +28,16 @@ public class PlayerMovementScript : MonoBehaviour
     public float jumpPadHeight = 3; //the multiplier for how much a jump pad will increase a players jump height
     bool doubleJump = true;
     bool didJump = false;
-    bool didDash = false;
     bool justSprinted = false;
     float defaultSpeed;
     bool isCrouched = false;
     float currentSpeed;
     public float sprintBoost;
-    bool isMovingX;
-    bool isMovingZ;
-
     RaycastHit hit;
 
     void Start() {
-        defaultSpeed = speed;
+        defaultSpeed = speed + 0.15f;
         dashSound = GetComponent<AudioSource>();
-    }
-
-    void FixedUpdate() {
-        
     }
 
     // Update is called once per frame
@@ -53,12 +45,11 @@ public class PlayerMovementScript : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         onJumpPad = Physics.CheckSphere(groundCheck.position, jumpPadDist, jumpMask);
-        print(Camera.main.fieldOfView);
 
         //SPRINT
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
             if(speed < 15) {
-                speed = 15;   //increases speed from 8 to 15 upon pressing lshift, and while not crouching
+                speed = 15f;   //increases speed from 8 to 15 upon pressing lshift, and while not crouching
             }
             justSprinted = true;
             //changing FOV on sprinting
@@ -74,10 +65,9 @@ public class PlayerMovementScript : MonoBehaviour
                 Camera.main.fieldOfView -= 0.3f;
             }
         }
-        
 
         //MUST HAVE THE "Ground" MASK FOR JUMPS TO WORK
-        if(isGrounded && velocity.y<0 ) {
+        if(isGrounded && velocity.y<0) {
             velocity.y = -0.5f;
             doubleJump = true; //resetting double jump check upon hitting ground
         }
@@ -94,17 +84,15 @@ public class PlayerMovementScript : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
 
         //INCREASES SPEED BY 10 ON Q PRESS
-        if(Input.GetKeyDown("q") && Time.time > lastDash) {
+        if(Input.GetKeyDown("q") && Time.time > lastDash && !isCrouched) {
             lastDash = dashCD + Time.time; //sets time since last dash
-            dashTime = 0.45f + Time.time; //how long bonus speed lasts (0.5s)
+            dashTime = 0.45f + Time.time; //how long bonus speed lasts (0.45s)
             speed = speed + dashSpeed; //setting actual speed
-            didDash = true;
             dashSound.Play(0);
         }
 
-        //AFTER 0.5s SPEED RETURNS TO NORMAL
+        //AFTER 0.45s SPEED RETURNS TO NORMAL
         if (Time.time > dashTime && speed >= defaultSpeed) {
-            didDash=false;
             if(isGrounded || speed>23.5f) {
                 speed = speed - 0.2f; //resetting speed
             }
@@ -121,7 +109,6 @@ public class PlayerMovementScript : MonoBehaviour
             } else {
                 body.transform.localScale += new Vector3(0f, -0.5f, 0f);
             }
-
             isCrouched = !isCrouched;
         }
 
