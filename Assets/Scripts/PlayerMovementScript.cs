@@ -34,6 +34,8 @@ public class PlayerMovementScript : MonoBehaviour
     bool isCrouched = false;
     float currentSpeed;
     public float sprintBoost;
+    bool isMovingX;
+    bool isMovingZ;
 
     RaycastHit hit;
 
@@ -49,11 +51,9 @@ public class PlayerMovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if(this.transform.position.y < -5) {
-            Vector3 newPos = this.transform.position;
-			newPos.y = 1;
-			this.transform.position = newPos;
-        }*/
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        onJumpPad = Physics.CheckSphere(groundCheck.position, jumpPadDist, jumpMask);
+        print(isGrounded);
 
         //SPRINT
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
@@ -66,7 +66,7 @@ public class PlayerMovementScript : MonoBehaviour
                 Camera.main.fieldOfView += 0.3f;
             }
         }
-        else if(justSprinted && speed >= defaultSpeed) {
+        else if(justSprinted && speed >= defaultSpeed && isGrounded) {
             speed -= 0.2f;
             justSprinted = false;
         } else {
@@ -77,14 +77,12 @@ public class PlayerMovementScript : MonoBehaviour
         
 
         //MUST HAVE THE "Ground" MASK FOR JUMPS TO WORK
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if(isGrounded && velocity.y<0 ) {
             velocity.y = -0.5f;
             doubleJump = true; //resetting double jump check upon hitting ground
         }
 
         //TO MAKE JUMP PADS, SIMPLY PUT THE "JumpPads" MASK ON WHATEVER YOU WANT
-        onJumpPad = Physics.CheckSphere(groundCheck.position, jumpPadDist, jumpMask);
         if(onJumpPad && Input.GetButtonDown("Jump")) {
             velocity.y = Mathf.Sqrt((jumpHeight*jumpPadHeight)*-2*gravity); //same as normal jump equation, but multiply jumpheight by how much the pad is boosting by
             didJump = true;
@@ -98,7 +96,7 @@ public class PlayerMovementScript : MonoBehaviour
         //INCREASES SPEED BY 10 ON Q PRESS
         if(Input.GetKeyDown("q") && Time.time > lastDash) {
             lastDash = dashCD + Time.time; //sets time since last dash
-            dashTime = 0.5f + Time.time; //how long bonus speed lasts (0.5s)
+            dashTime = 0.45f + Time.time; //how long bonus speed lasts (0.5s)
             speed = speed + dashSpeed; //setting actual speed
             didDash = true;
             dashSound.Play(0);
@@ -106,8 +104,15 @@ public class PlayerMovementScript : MonoBehaviour
 
         //AFTER 0.5s SPEED RETURNS TO NORMAL
         if (Time.time > dashTime && speed >= defaultSpeed) {
-            speed = speed - 0.2f; //resetting speed
             didDash=false;
+            if(isGrounded || speed>23.5f) {
+                speed = speed - 0.2f; //resetting speed
+            }
+        }
+
+        if(move.x == 0 && move.z == 0) {
+            
+
         }
 
         //CROUCH
