@@ -53,7 +53,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         onJumpPad = Physics.CheckSphere(groundCheck.position, jumpPadDist, jumpMask);
-        print(isGrounded);
+        print(Camera.main.fieldOfView);
 
         //SPRINT
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
@@ -62,7 +62,7 @@ public class PlayerMovementScript : MonoBehaviour
             }
             justSprinted = true;
             //changing FOV on sprinting
-            if (Camera.main.fieldOfView < 95f) {
+            if (Camera.main.fieldOfView < 95f || speed>25) {
                 Camera.main.fieldOfView += 0.3f;
             }
         }
@@ -107,6 +107,10 @@ public class PlayerMovementScript : MonoBehaviour
             didDash=false;
             if(isGrounded || speed>23.5f) {
                 speed = speed - 0.2f; //resetting speed
+            }
+
+            if(Camera.main.fieldOfView > 95 || speed<25) {
+                Camera.main.fieldOfView -= 0.15f;
             }
         }
 
