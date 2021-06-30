@@ -32,6 +32,8 @@ public class PlayerMovementScript : MonoBehaviour
     bool justSprinted = false;
     float defaultSpeed;
     bool isCrouched = false;
+    float currentSpeed;
+    public float sprintBoost;
 
     RaycastHit hit;
 
@@ -55,7 +57,7 @@ public class PlayerMovementScript : MonoBehaviour
 
         //SPRINT
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
-            if(speed < 35) {
+            if(speed < 15) {
                 speed = 15;   //increases speed from 8 to 15 upon pressing lshift, and while not crouching
             }
             justSprinted = true;
@@ -64,8 +66,8 @@ public class PlayerMovementScript : MonoBehaviour
                 Camera.main.fieldOfView += 0.3f;
             }
         }
-        else if(justSprinted) {
-            speed = defaultSpeed;
+        else if(justSprinted && speed >= defaultSpeed) {
+            speed -= 0.2f;
             justSprinted = false;
         } else {
             if (Camera.main.fieldOfView > 80f) {
@@ -103,8 +105,8 @@ public class PlayerMovementScript : MonoBehaviour
         }
 
         //AFTER 0.5s SPEED RETURNS TO NORMAL
-        if (Time.time > dashTime && didDash) {
-            speed = speed - dashSpeed; //resetting speed
+        if (Time.time > dashTime && speed >= defaultSpeed) {
+            speed = speed - 0.2f; //resetting speed
             didDash=false;
         }
 

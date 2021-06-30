@@ -1773,13 +1773,13 @@ Terrain:
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 5af93bd8aea56564d8f1961fca6339ad, type: 2}
   m_TreeDistance: 5000
-  m_TreeBillboardDistance: 50
-  m_TreeCrossFadeLength: 5
+  m_TreeBillboardDistance: 72
+  m_TreeCrossFadeLength: 8.7
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
+  m_DetailObjectDistance: 105
   m_DetailObjectDensity: 1
-  m_HeightmapPixelError: 5
-  m_SplatMapDistance: 1000
+  m_HeightmapPixelError: 1
+  m_SplatMapDistance: 1511
   m_HeightmapMaximumLOD: 0
   m_ShadowCastingMode: 2
   m_DrawHeightmap: 1
@@ -3385,7 +3385,7 @@ MonoBehaviour:
   dashCD: 3
   controller: {fileID: 1512108468}
   groundCheck: {fileID: 839134078}
-  groundDistance: 0.4
+  groundDistance: 0.2
   groundMask:
     serializedVersion: 2
     m_Bits: 64
@@ -3396,6 +3396,7 @@ MonoBehaviour:
   dashSound: {fileID: 0}
   dashSpeed: 20
   jumpPadHeight: 3
+  sprintBoost: 5
 --- !u!143 &1512108468
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3552,14 +3553,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761531448}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 1.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2087483111}
   m_Father: {fileID: 1512108469}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 180}
 --- !u!114 &1761531450
 MonoBehaviour:
   m_ObjectHideFlags: 0
