@@ -109,14 +109,9 @@ public class PlayerMovementScript : MonoBehaviour
                 speed = speed - 0.2f; //resetting speed
             }
 
-            if(Camera.main.fieldOfView > 95 || speed<25) {
+            if((Camera.main.fieldOfView > 95 || speed<25) && Camera.main.fieldOfView >80) {
                 Camera.main.fieldOfView -= 0.15f;
             }
-        }
-
-        if(move.x == 0 && move.z == 0) {
-            
-
         }
 
         //CROUCH
