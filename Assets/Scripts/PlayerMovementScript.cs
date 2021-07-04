@@ -45,7 +45,6 @@ public class PlayerMovementScript : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         onJumpPad = Physics.CheckSphere(groundCheck.position, jumpPadDist, jumpMask);
-
         //SPRINT
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
             if(speed < 15) {
@@ -53,7 +52,10 @@ public class PlayerMovementScript : MonoBehaviour
             }
             justSprinted = true;
             //changing FOV on sprinting
-            if (Camera.main.fieldOfView < 95f || speed>25) {
+            if (Camera.main.fieldOfView < 95f && speed>14) {
+               Camera.main.fieldOfView += 0.3f;
+            }
+            else if(Camera.main.fieldOfView < 110 && speed > 16) {
                 Camera.main.fieldOfView += 0.3f;
             }
         }
