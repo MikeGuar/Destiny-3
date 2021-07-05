@@ -35,6 +35,8 @@ public class PlayerMovementScript : MonoBehaviour
     public float sprintBoost;
     RaycastHit hit;
 
+    private ArrayList effects = new ArrayList();
+
     void Start() {
         defaultSpeed = speed + 0.15f;
         dashSound = GetComponent<AudioSource>();
@@ -141,5 +143,9 @@ public class PlayerMovementScript : MonoBehaviour
                 Debug.Log("Did not Hit");
             }
         }
+    }
+
+    public void addEffect(Effect effect) {
+        effects.Add(effect);
     }
 }
