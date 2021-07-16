@@ -44,6 +44,7 @@ public class GhostScript : MonoBehaviour
 
         if (Physics.Raycast(transform.position, Vector3.forward, out objectHit, 5) || Physics.Raycast(transform.position, Vector3.right, out objectHit, 5)
         || Physics.Raycast(transform.position, Vector3.left, out objectHit, 5)) {
+            
             nextMove = new Vector3(-1*rand, 0, -1*rand2);
         }
         
