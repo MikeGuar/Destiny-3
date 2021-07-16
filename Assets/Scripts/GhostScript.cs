@@ -9,6 +9,7 @@ public class GhostScript : MonoBehaviour
     public float aggroRange;
     public float speed; 
     public Rigidbody body;
+    public RectTransform deathScreen;
 
     RaycastHit hit;
     float timer;
@@ -54,9 +55,14 @@ public class GhostScript : MonoBehaviour
 
             if(Physics.Raycast(transform.position, (player.transform.position - transform.position), out hit, aggroRange)) {
                 
-                body.MovePosition(transform.position + player.transform.position * Time.deltaTime * speed);
+                Vector3 direction = (player.transform.position - transform.position).normalized;
+                body.MovePosition(transform.position + direction * Time.deltaTime * speed * 10);
 
-                if (Vector3.Distance(transform.position, player.transform.position) < 2.0f) {
+                if (Vector3.Distance(transform.position, player.transform.position) < 3.0f) {
+                    Cursor.lockState = CursorLockMode.None;
+                    player.GetComponent<PlayerMovementScript>().speed = 0f;
+                    //player.GetComponent<PlayerMovementScript>().addEffect(new StunEffect(5f, player));
+                    deathScreen.GetComponent<DeathButtonScript>().onDeath();
                 }
             }
         }

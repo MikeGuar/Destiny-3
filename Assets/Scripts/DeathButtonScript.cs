@@ -20,4 +20,8 @@ public class DeathButtonScript : MonoBehaviour
         SceneManager.LoadScene(sceneNumber);
     }
 
+    public void onDeath() {
+        deathScreen.gameObject.SetActive(true);
+    }
+
 }
