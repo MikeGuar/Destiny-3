@@ -32,7 +32,6 @@ public class GhostScript : MonoBehaviour
         timer -= Time.deltaTime;
         if(timer < 0) {
             timer = 5;
-            print("i moving he he");
             rand = Random.Range(-10f, 10f);
             rand2 = Random.Range(-10f, 10f);
             nextMove = new Vector3(rand, 0, rand2);

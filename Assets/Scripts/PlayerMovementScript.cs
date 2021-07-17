@@ -17,6 +17,7 @@ public class PlayerMovementScript : MonoBehaviour
     public LayerMask jumpMask;
     public Transform body;
     public AudioSource dashSound;
+    public LayerMask collectibleMask;
 
     float jumpPadDist = 0.5f; 
     float lastDash;
@@ -34,6 +35,8 @@ public class PlayerMovementScript : MonoBehaviour
     float currentSpeed;
     public float sprintBoost;
     RaycastHit hit;
+    bool onCollectible;
+    float collectCheck;
 
     private ArrayList effects = new ArrayList();
 
@@ -45,8 +48,15 @@ public class PlayerMovementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        onCollectible = Physics.CheckSphere(groundCheck.position, 2.18f, collectibleMask);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         onJumpPad = Physics.CheckSphere(groundCheck.position, jumpPadDist, jumpMask);
+
+        if(onCollectible && collectCheck < Time.time-0.1) {
+            print("player collected object");
+            collectCheck = Time.time; 
+        }
+
         //SPRINT
         if(Input.GetKey(KeyCode.LeftShift) && !isCrouched) {
             if(speed < 15) {
