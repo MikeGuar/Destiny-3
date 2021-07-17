@@ -20,7 +20,6 @@ public class CollectibleScript : MonoBehaviour
         playerNear = Physics.CheckSphere(transform.position, 1.5f, playerMask);
         if(playerNear) {
             gameObject.SetActive(false);
-            print("collected object!");
         }
 
     }
