@@ -17,6 +17,7 @@ public class GhostScript : MonoBehaviour
     float rand2;
     Vector3 nextMove;
     RaycastHit objectHit;
+    bool collision;
 
 
     // Start is called before the first frame update
@@ -36,19 +37,7 @@ public class GhostScript : MonoBehaviour
             rand2 = Random.Range(-10f, 10f);
             nextMove = new Vector3(rand, 0, rand2);
         }
-
-        /*if (Physics.Raycast(transform.position, Vector3.forward, out objectHit, 5) || Physics.Raycast(transform.position, Vector3.left, out objectHit, 5)
-        || Physics.Raycast(transform.position, Vector3.right, out objectHit, 5)) {
-            timer = 0;
-        }*/
-
-        if (Physics.Raycast(transform.position, Vector3.forward, out objectHit, 5) || Physics.Raycast(transform.position, Vector3.right, out objectHit, 5)
-        || Physics.Raycast(transform.position, Vector3.left, out objectHit, 5)) {
-            
-            nextMove = new Vector3(-1*rand, 0, -1*rand2);
-        }
-        
-        
+         
         //if close to player go inside block
         if(Vector3.Distance(transform.position, player.transform.position) < aggroRange) {
 
@@ -70,5 +59,16 @@ public class GhostScript : MonoBehaviour
         }
 
         
+    }
+
+    void OnCollisionEnter(Collision other) {
+        if(collision == false) {
+            collision = true;
+            nextMove = new Vector3(-1*rand, 0, -1*rand2);
+        }   
+    }
+
+    void OnCollisionExit(Collision coll) {
+        collision = false;
     }
 }
